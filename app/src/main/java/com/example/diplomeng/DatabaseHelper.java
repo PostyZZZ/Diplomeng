@@ -57,5 +57,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor.getCount() > 0;
     }
 
+    public String getUsernameByEmailOrUsername(String emailOrUsername) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT " + COLUMN_USERNAME + " FROM " + TABLE_NAME +
+                " WHERE " + COLUMN_EMAIL + " = ? OR " + COLUMN_USERNAME + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{emailOrUsername, emailOrUsername});
+        String username = null;
+        if (cursor.moveToFirst()) {
+            username = cursor.getString(cursor.getColumnIndex(COLUMN_USERNAME));
+        }
+        cursor.close();
+        return username;
+    }
+
+    public String getEmailByUsername(String username) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT " + COLUMN_EMAIL + " FROM " + TABLE_NAME +
+                " WHERE " + COLUMN_USERNAME + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{username});
+        String email = null;
+        if (cursor.moveToFirst()) {
+            email = cursor.getString(cursor.getColumnIndex(COLUMN_EMAIL));
+        }
+        cursor.close();
+        return email;
+    }
 }
+
 

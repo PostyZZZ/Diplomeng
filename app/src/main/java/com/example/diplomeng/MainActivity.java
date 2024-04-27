@@ -112,7 +112,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss(); // Закрыть диалоговое окно при нажатии кнопки "Назад"
+            }
+        });
+
+        dialog.show();
     }
 }
+
 
 
