@@ -42,6 +42,8 @@ dependencies {
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
     implementation("com.google.android.material:material:1.4.0")
+    implementation("com.android.volley:volley:1.2.1")
+    implementation("com.google.code.gson:gson:2.8.8")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

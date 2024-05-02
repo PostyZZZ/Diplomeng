@@ -5,5 +5,10 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="select_direction">Выберите направление перевода</string>
+
+    <string-array name="directions">
+        <item>С русского на английский</item>
+        <item>С английского на русский</item>
+    </string-array>
 </resources>

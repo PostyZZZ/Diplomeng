@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1B263B"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".DictionaryFragment">
+
+    <Spinner
+        android:id="@+id/spinnerDirection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/directions"
+        android:prompt="@string/select_direction"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextWord"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="#FFFFFF"
+        android:hint="Введите слово"
+        android:inputType="text"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textCursorDrawable="@drawable/custom_cursor"
+        android:textColorLink="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerDirection" />
+
+    <Button
+        android:id="@+id/buttonSearch"
+        android:layout_width="179dp"
+        android:layout_height="48dp"
+        android:background="@drawable/btn1"
+        android:layout_gravity="center"
+        android:layout_marginTop="32dp"
+        android:text="Найти"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textColorLink="#FFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextWord" />
+
+    <TextView
+        android:id="@+id/textViewTranslation"
+        android:layout_width="340dp"
+        android:layout_height="19dp"
+        android:layout_marginTop="40dp"
+        android:text=""
+        android:textColorLink="#FFFFFF"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSearch"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
