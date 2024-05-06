@@ -1,7 +1,8 @@
 package com.example.diplomeng;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,10 +23,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class DictionaryFragment extends Fragment {
 
     private EditText editTextWord;
     private Button buttonSearch;
+    private Button buttonAddToFavorites;
     private Spinner spinnerDirection;
     private TextView textViewTranslation;
 
@@ -34,8 +41,10 @@ public class DictionaryFragment extends Fragment {
 
         editTextWord = view.findViewById(R.id.editTextWord);
         buttonSearch = view.findViewById(R.id.buttonSearch);
+        buttonAddToFavorites = view.findViewById(R.id.buttonFavorite);
         spinnerDirection = view.findViewById(R.id.spinnerDirection);
         textViewTranslation = view.findViewById(R.id.textViewTranslation);
+
 
         buttonSearch.setOnClickListener(v -> {
             String word = editTextWord.getText().toString().trim();
@@ -45,6 +54,10 @@ public class DictionaryFragment extends Fragment {
             } else {
                 Toast.makeText(getActivity(), "Введите слово", Toast.LENGTH_SHORT).show();
             }
+        });
+
+        buttonAddToFavorites.setOnClickListener(v -> {
+            addToFavorites();
         });
 
         return view;
@@ -63,29 +76,24 @@ public class DictionaryFragment extends Fragment {
                 "&lang=" + lang +
                 "&text=" + word;
 
-        // Создаем запрос
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
                 null,
                 response -> {
                     try {
-                        // Обработка ответа API
                         JSONArray defArray = response.getJSONArray("def");
                         StringBuilder translations = new StringBuilder();
                         if (defArray.length() > 0) {
-                            // Проходим по всем вариантам перевода
                             for (int i = 0; i < defArray.length(); i++) {
                                 JSONObject defObject = defArray.getJSONObject(i);
                                 JSONArray trArray = defObject.getJSONArray("tr");
                                 if (trArray.length() > 0) {
-                                    // Получаем только первый перевод
                                     JSONObject trObject = trArray.getJSONObject(0);
                                     String translation = trObject.getString("text");
                                     translations.append(translation).append("\n");
                                 }
                             }
-                            // Отображаем перевод
                             textViewTranslation.setText(translations.toString());
                         } else {
                             Toast.makeText(getActivity(), "Перевод не найден", Toast.LENGTH_SHORT).show();
@@ -96,14 +104,33 @@ public class DictionaryFragment extends Fragment {
                     }
                 },
                 error -> {
-                    // Обработка ошибок запроса
                     Toast.makeText(getActivity(), "Ошибка запроса: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
         );
 
-        // Добавляем запрос в очередь запросов
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
         requestQueue.add(request);
+    }
+
+    private void addToFavorites() {
+        String word = editTextWord.getText().toString().trim();
+        String translation = textViewTranslation.getText().toString().trim();
+
+        if (!word.isEmpty() && !translation.isEmpty()) {
+            SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("Favorites", Context.MODE_PRIVATE);
+            Set<String> favoritesSet = sharedPreferences.getStringSet("words", new HashSet<>());
+
+            String favoriteItem = word + " - " + translation;
+            favoritesSet.add(favoriteItem);
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putStringSet("words", favoritesSet);
+            editor.apply();
+
+            Toast.makeText(requireContext(), "Слово добавлено в избранное", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(requireContext(), "Введите слово и перевод", Toast.LENGTH_SHORT).show();
+        }
     }
 }
 

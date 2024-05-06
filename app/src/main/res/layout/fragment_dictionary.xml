@@ -13,7 +13,10 @@
         android:id="@+id/spinnerDirection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="#FFFFFF"
         android:entries="@array/directions"
+        android:foregroundTint="#FFFFFF"
+        android:textColor="#FFFFFF"
         android:prompt="@string/select_direction"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,8 +24,8 @@
 
     <EditText
         android:id="@+id/editTextWord"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="370dp"
+        android:layout_height="38dp"
         android:layout_marginTop="24dp"
         android:backgroundTint="#FFFFFF"
         android:hint="Введите слово"
@@ -30,25 +33,26 @@
         android:textColor="#FFFFFF"
         android:textColorHighlight="#FFFFFF"
         android:textColorHint="#FFFFFF"
-        android:textCursorDrawable="@drawable/custom_cursor"
         android:textColorLink="#FFFFFF"
+        android:textCursorDrawable="@drawable/custom_cursor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerDirection" />
 
     <Button
         android:id="@+id/buttonSearch"
-        android:layout_width="179dp"
-        android:layout_height="48dp"
-        android:background="@drawable/btn1"
+        android:layout_width="178dp"
+        android:layout_height="45dp"
         android:layout_gravity="center"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/btn1"
         android:text="Найти"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textColorLink="#FFFFFF"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextWord" />
 
@@ -60,12 +64,29 @@
         android:text=""
         android:textColorLink="#FFFFFF"
         android:textSize="18sp"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonSearch"
         app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/buttonFavorite"
+        android:layout_width="178dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/btn1"
+        android:text="Избранное"
+        android:textColor="#FFFFFF"
+        android:textColorLink="#FFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/buttonSearch"
+        app:layout_constraintTop_toBottomOf="@+id/editTextWord" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

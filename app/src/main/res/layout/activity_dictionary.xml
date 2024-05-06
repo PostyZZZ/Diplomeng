@@ -26,4 +26,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nav_dictionary" />
 
+
 </androidx.constraintlayout.widget.ConstraintLayout>
