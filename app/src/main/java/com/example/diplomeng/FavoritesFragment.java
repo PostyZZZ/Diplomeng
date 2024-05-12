@@ -11,15 +11,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class FavoritesFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private Set<String> favoritesSet;
+    private List<String> favoritesList;
+    private DatabaseHelper dbHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,14 +27,24 @@ public class FavoritesFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("Favorites", Context.MODE_PRIVATE);
-        favoritesSet = sharedPreferences.getStringSet("words", new HashSet<>());
+        dbHelper = new DatabaseHelper(requireContext());
 
-        List<String> favoritesList = new ArrayList<>(favoritesSet);
+        // Получаем избранные слова из базы данных
+        int userId = getCurrentUserId();
+        favoritesList = dbHelper.getFavoritesByUserId(userId);
+
+        // Создаем и устанавливаем адаптер
         FavoritesAdapter adapter = new FavoritesAdapter(favoritesList);
         recyclerView.setAdapter(adapter);
 
         return view;
     }
+
+    // Метод для получения ID текущего пользователя
+    private int getCurrentUserId() {
+        SharedPreferences preferences = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        return preferences.getInt("userId", -1);
+    }
 }
+
 

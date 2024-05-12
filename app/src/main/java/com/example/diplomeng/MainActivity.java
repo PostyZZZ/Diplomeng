@@ -10,7 +10,13 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.safetynet.SafetyNet;
+import com.google.android.gms.safetynet.SafetyNetApi;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private CheckBox rememberMeCheckbox; // Добавим CheckBox
     private DatabaseHelper databaseHelper;
     private SharedPreferences sharedPreferences;
+    private int loginAttempts = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +86,33 @@ public class MainActivity extends AppCompatActivity {
                 editor.apply();
             }
         } else {
-            Toast.makeText(MainActivity.this, "Неверные почта/логин или пароль", Toast.LENGTH_SHORT).show();
+            loginAttempts++;
+            if (loginAttempts >= 3) {
+                // Здесь вызываем функцию, чтобы показать капчу
+                showCaptcha();
+            } else {
+                Toast.makeText(MainActivity.this, "Неверные почта/логин или пароль", Toast.LENGTH_SHORT).show();
+            }
         }
+    }
+    private void showCaptcha() {
+        SafetyNet.getClient(this).verifyWithRecaptcha("6LdG3dkpAAAAABf_oiYpLS_WPAtGimDW_MvcMJa4")
+                .addOnSuccessListener(this, new OnSuccessListener<SafetyNetApi.RecaptchaTokenResponse>() {
+                    @Override
+                    public void onSuccess(SafetyNetApi.RecaptchaTokenResponse response) {
+                        if (!response.getTokenResult().isEmpty()) {
+                            // Капча успешно пройдена, продолжайте вход
+                            Toast.makeText(MainActivity.this, "Капча пройдена, продолжайте вход", Toast.LENGTH_SHORT).show();
+                            // Здесь можно продолжить логику входа
+                        }
+                    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(MainActivity.this, "Ошибка капчи", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void showRegisterDialog() {
@@ -122,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 }
+
 
 
 

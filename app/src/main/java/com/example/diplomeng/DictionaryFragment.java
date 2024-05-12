@@ -23,9 +23,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class DictionaryFragment extends Fragment {
 
     private EditText editTextWord;
@@ -33,6 +30,8 @@ public class DictionaryFragment extends Fragment {
     private Button buttonAddToFavorites;
     private Spinner spinnerDirection;
     private TextView textViewTranslation;
+
+    private DatabaseHelper dbHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,6 +44,7 @@ public class DictionaryFragment extends Fragment {
         spinnerDirection = view.findViewById(R.id.spinnerDirection);
         textViewTranslation = view.findViewById(R.id.textViewTranslation);
 
+        dbHelper = new DatabaseHelper(requireContext());
 
         buttonSearch.setOnClickListener(v -> {
             String word = editTextWord.getText().toString().trim();
@@ -95,6 +95,8 @@ public class DictionaryFragment extends Fragment {
                                 }
                             }
                             textViewTranslation.setText(translations.toString());
+
+                            saveToFavorites(word, translations.toString());
                         } else {
                             Toast.makeText(getActivity(), "Перевод не найден", Toast.LENGTH_SHORT).show();
                         }
@@ -113,24 +115,24 @@ public class DictionaryFragment extends Fragment {
     }
 
     private void addToFavorites() {
-        String word = editTextWord.getText().toString().trim();
-        String translation = textViewTranslation.getText().toString().trim();
+    }
 
-        if (!word.isEmpty() && !translation.isEmpty()) {
-            SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("Favorites", Context.MODE_PRIVATE);
-            Set<String> favoritesSet = sharedPreferences.getStringSet("words", new HashSet<>());
+    private void saveToFavorites(String word, String translation) {
+        // Получаем ID текущего пользователя
+        int userId = getCurrentUserId();
 
-            String favoriteItem = word + " - " + translation;
-            favoritesSet.add(favoriteItem);
-
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putStringSet("words", favoritesSet);
-            editor.apply();
-
+        boolean saved = dbHelper.addFavorite(userId, word, translation);
+        if (saved) {
             Toast.makeText(requireContext(), "Слово добавлено в избранное", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(requireContext(), "Введите слово и перевод", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Не удалось добавить слово в избранное", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private int getCurrentUserId() {
+
+        SharedPreferences preferences = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        return preferences.getInt("userId", -1);
     }
 }
 
