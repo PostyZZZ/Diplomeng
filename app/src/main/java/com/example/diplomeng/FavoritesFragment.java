@@ -29,7 +29,7 @@ public class FavoritesFragment extends Fragment {
 
         dbHelper = new DatabaseHelper(requireContext());
 
-        // Получаем избранные слова из базы данных
+        // Получаем избранные слова из базы данных для текущего пользователя
         int userId = getCurrentUserId();
         favoritesList = dbHelper.getFavoritesByUserId(userId);
 
@@ -42,9 +42,10 @@ public class FavoritesFragment extends Fragment {
 
     // Метод для получения ID текущего пользователя
     private int getCurrentUserId() {
-        SharedPreferences preferences = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences preferences = requireContext().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE);
         return preferences.getInt("userId", -1);
     }
 }
+
 
 

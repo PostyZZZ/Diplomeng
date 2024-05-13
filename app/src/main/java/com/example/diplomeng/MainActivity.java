@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText emailOrUsernameEditText, passwordEditText;
     private Button loginButton, registerButton;
-    private CheckBox rememberMeCheckbox; // Добавим CheckBox
+    private CheckBox rememberMeCheckbox;
     private DatabaseHelper databaseHelper;
     private SharedPreferences sharedPreferences;
     private int loginAttempts = 0;
@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String emailOrUsername = emailOrUsernameEditText.getText().toString().trim();
                 String password = passwordEditText.getText().toString().trim();
                 if (emailOrUsername.isEmpty() || password.isEmpty()) {
@@ -71,33 +70,31 @@ public class MainActivity extends AppCompatActivity {
     private void login(String emailOrUsername, String password) {
         boolean success = databaseHelper.checkUser(emailOrUsername, password);
         if (success) {
+            int userId = databaseHelper.getUserIdByEmailOrUsername(emailOrUsername);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("rememberMe", true);
+            editor.putInt("userId", userId); // Установите правильный userId
+            editor.apply();
+
             Intent intent = new Intent(MainActivity.this, MenuActivity.class);
             startActivity(intent);
             finish();
-            if (rememberMeCheckbox.isChecked()) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean("rememberMe", true);
-                editor.putString("emailOrUsername", emailOrUsername);
-                editor.putString("password", password);
-                editor.apply();
-            }
         } else {
             loginAttempts++;
             if (loginAttempts >= 3) {
-                // Здесь вызываем функцию, чтобы показать капчу
                 showCaptcha();
             } else {
                 Toast.makeText(MainActivity.this, "Неверные почта/логин или пароль", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
+
     private void showCaptcha() {
         SafetyNet.getClient(this).verifyWithRecaptcha("6LdY8tkpAAAAAA9cZxSiZ0uoib1xzqn_d2ng3xvr")
                 .addOnSuccessListener(this, response -> {
                     if (!response.getTokenResult().isEmpty()) {
-                        // Капча успешно пройдена, продолжайте вход
                         Toast.makeText(MainActivity.this, "Капча пройдена, продолжайте вход", Toast.LENGTH_SHORT).show();
-                        // Здесь можно продолжить логику входа
                     }
                 })
                 .addOnFailureListener(this, e -> {
@@ -106,8 +103,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     private void showRegisterDialog() {
+
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_register);
 

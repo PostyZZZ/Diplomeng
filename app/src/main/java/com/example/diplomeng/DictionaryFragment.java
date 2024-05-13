@@ -129,11 +129,13 @@ public class DictionaryFragment extends Fragment {
         }
     }
 
-    private int getCurrentUserId() {
 
-        SharedPreferences preferences = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+    private int getCurrentUserId() {
+        SharedPreferences preferences = requireContext().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE);
         return preferences.getInt("userId", -1);
     }
+
+
 }
 
 

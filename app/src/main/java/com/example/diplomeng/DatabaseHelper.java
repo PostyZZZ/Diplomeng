@@ -73,12 +73,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean addFavorite(int userId, String word, String translation) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COLUMN_USER_ID_FK, userId);
+        contentValues.put(COLUMN_USER_ID_FK, userId); // Используйте полученный userId
         contentValues.put(COLUMN_WORD, word);
         contentValues.put(COLUMN_TRANSLATION, translation);
         long result = db.insert(TABLE_FAVORITES, null, contentValues);
         return result != -1;
     }
+
 
     public List<String> getFavoritesByUserId(int userId) {
         List<String> favoritesList = new ArrayList<>();
@@ -139,5 +140,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return email;
     }
+
+    public int getUserIdByEmailOrUsername(String emailOrUsername) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT " + COLUMN_USER_ID + " FROM " + TABLE_USERS +
+                " WHERE " + COLUMN_EMAIL + " = ? OR " + COLUMN_USERNAME + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{emailOrUsername, emailOrUsername});
+        int userId = -1; // Инициализируем userId -1 в случае, если пользователя не найдено
+        if (cursor.moveToFirst()) {
+            userId = cursor.getInt(cursor.getColumnIndex(COLUMN_USER_ID));
+        }
+        cursor.close();
+        return userId;
+    }
+
 }
 
