@@ -37,13 +37,17 @@ public class MainActivity extends AppCompatActivity {
         databaseHelper = new DatabaseHelper(this);
         sharedPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
 
+        // Восстанавливаем состояние чекбокса
         boolean rememberMe = sharedPreferences.getBoolean("rememberMe", false);
+        rememberMeCheckbox.setChecked(rememberMe);
+
+        // Проверяем, нужно ли автоматически выполнить вход
         if (rememberMe) {
             String savedEmailOrUsername = sharedPreferences.getString("emailOrUsername", "");
             String savedPassword = sharedPreferences.getString("password", "");
-            emailOrUsernameEditText.setText(savedEmailOrUsername);
-            passwordEditText.setText(savedPassword);
-            login(savedEmailOrUsername, savedPassword);
+            if (!savedEmailOrUsername.isEmpty() && !savedPassword.isEmpty()) {
+                login(savedEmailOrUsername, savedPassword);
+            }
         }
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -71,14 +75,12 @@ public class MainActivity extends AppCompatActivity {
         boolean success = databaseHelper.checkUser(emailOrUsername, password);
         if (success) {
             int userId = databaseHelper.getUserIdByEmailOrUsername(emailOrUsername);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("rememberMe", true);
-            editor.putInt("userId", userId); // Установите правильный userId
-            editor.apply();
-
-            Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-            startActivity(intent);
-            finish();
+            if (rememberMeCheckbox.isChecked()) {
+                saveCredentials(emailOrUsername, password, userId);
+            } else {
+                clearSavedCredentials();
+            }
+            navigateToMenuActivity(userId);
         } else {
             loginAttempts++;
             if (loginAttempts >= 3) {
@@ -89,6 +91,30 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void saveCredentials(String emailOrUsername, String password, int userId) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("rememberMe", true);
+        editor.putString("emailOrUsername", emailOrUsername);
+        editor.putString("password", password);
+        editor.putInt("userId", userId);
+        editor.apply();
+    }
+
+    private void clearSavedCredentials() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("rememberMe");
+        editor.remove("emailOrUsername");
+        editor.remove("password");
+        editor.remove("userId");
+        editor.apply();
+    }
+
+    private void navigateToMenuActivity(int userId) {
+        Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+        intent.putExtra("userId", userId);
+        startActivity(intent);
+        finish();
+    }
 
     private void showCaptcha() {
         SafetyNet.getClient(this).verifyWithRecaptcha("6LdY8tkpAAAAAA9cZxSiZ0uoib1xzqn_d2ng3xvr")
@@ -100,11 +126,10 @@ public class MainActivity extends AppCompatActivity {
                 .addOnFailureListener(this, e -> {
                     Toast.makeText(MainActivity.this, "Ошибка капчи " + e.toString(), Toast.LENGTH_SHORT).show();
                 });
-
     }
 
     private void showRegisterDialog() {
-
+        // Your  dialog logic
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_register);
 
@@ -136,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss(); // Закрыть диалоговое окно при нажатии кнопки "Назад"
+                dialog.dismiss();
             }
         });
 

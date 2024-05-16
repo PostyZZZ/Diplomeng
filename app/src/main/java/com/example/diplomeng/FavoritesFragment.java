@@ -3,6 +3,7 @@ package com.example.diplomeng;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ public class FavoritesFragment extends Fragment {
     private RecyclerView recyclerView;
     private List<String> favoritesList;
     private DatabaseHelper dbHelper;
+    private int userId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,23 +31,22 @@ public class FavoritesFragment extends Fragment {
 
         dbHelper = new DatabaseHelper(requireContext());
 
-        // Получаем избранные слова из базы данных для текущего пользователя
-        int userId = getCurrentUserId();
+        userId = getCurrentUserId();
+        Log.d("FavoritesFragment", "Current userId: " + userId);
         favoritesList = dbHelper.getFavoritesByUserId(userId);
 
-        // Создаем и устанавливаем адаптер
-        FavoritesAdapter adapter = new FavoritesAdapter(favoritesList);
+        FavoritesAdapter adapter = new FavoritesAdapter(favoritesList, dbHelper, userId);
         recyclerView.setAdapter(adapter);
 
         return view;
     }
 
-    // Метод для получения ID текущего пользователя
     private int getCurrentUserId() {
         SharedPreferences preferences = requireContext().getSharedPreferences("loginPrefs", Context.MODE_PRIVATE);
         return preferences.getInt("userId", -1);
     }
 }
+
 
 
 

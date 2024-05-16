@@ -12,7 +12,9 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "users.db";
-    private static final int DATABASE_VERSION = 2; // Увеличим версию базы данных
+    private static final int DATABASE_VERSION = 3; // Увеличим версию базы данных
+    private static final String COLUMN_AVATAR_PATH = "avatar_path";
+
 
     // Таблица пользователей
     private static final String TABLE_USERS = "users";
@@ -28,6 +30,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_WORD = "word";
     private static final String COLUMN_TRANSLATION = "translation";
 
+
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -38,10 +42,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_USERNAME + " TEXT, " +
                 COLUMN_EMAIL + " TEXT, " +
-                COLUMN_PASSWORD + " TEXT)";
+                COLUMN_PASSWORD + " TEXT, " +
+                COLUMN_AVATAR_PATH + " TEXT)"; // Добавляем столбец для пути к аватару
         db.execSQL(createUserTableQuery);
 
-        // Создаем таблицу избранных слов
+
+
+    // Создаем таблицу избранных слов
         String createFavoritesTableQuery = "CREATE TABLE " + TABLE_FAVORITES + " (" +
                 COLUMN_FAVORITE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_USER_ID_FK + " INTEGER, " +
@@ -152,6 +159,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return userId;
+    }
+    public boolean updateAvatarPath(int userId, String avatarPath) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_AVATAR_PATH, avatarPath);
+        int affectedRows = db.update(TABLE_USERS, contentValues, COLUMN_USER_ID + " = ?", new String[]{String.valueOf(userId)});
+        return affectedRows > 0;
+    }
+    public String getAvatarPathByUserId(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT " + COLUMN_AVATAR_PATH + " FROM " + TABLE_USERS +
+                " WHERE " + COLUMN_USER_ID + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(userId)});
+        String avatarPath = null;
+        if (cursor.moveToFirst()) {
+            avatarPath = cursor.getString(cursor.getColumnIndex(COLUMN_AVATAR_PATH));
+        }
+        cursor.close();
+        return avatarPath;
     }
 
 }
