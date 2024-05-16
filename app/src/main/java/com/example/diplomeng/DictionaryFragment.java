@@ -49,6 +49,7 @@ public class DictionaryFragment extends Fragment {
         buttonSearch.setOnClickListener(v -> {
             String word = editTextWord.getText().toString().trim();
             String direction = spinnerDirection.getSelectedItem().toString();
+
             if (!word.isEmpty()) {
                 searchTranslation(word, direction);
             } else {

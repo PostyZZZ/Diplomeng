@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1050628294923",
+    "project_id": "diplomeng-1715538883706",
+    "storage_bucket": "diplomeng-1715538883706.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1050628294923:android:237266d1d4e2bbcfccfa0e",
+        "android_client_info": {
+          "package_name": "com.example.diplomeng"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCX-em6k-qbfANczaKZ1d8Or8BDlVkHEs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

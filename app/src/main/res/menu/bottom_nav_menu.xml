@@ -14,4 +14,8 @@
         android:id="@+id/settings"
         android:title="Настройки"
         android:icon="@drawable/ic_settings"/>
+    <item
+        android:id="@+id/aichat"
+        android:title="Чат"
+        android:icon="@drawable/ic_chat" />
 </menu>

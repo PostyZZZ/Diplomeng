@@ -1,10 +1,12 @@
 package com.example.diplomeng;
 
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 import com.example.diplomeng.databinding.ActivityMenuBinding;
 
 public class MenuActivity extends AppCompatActivity {
@@ -19,16 +21,23 @@ public class MenuActivity extends AppCompatActivity {
         replaceFragment(new HomeFragment());
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+            Fragment selectedFragment = null;
             if (item.getItemId() == R.id.home) {
-                replaceFragment(new HomeFragment());
+                selectedFragment = new HomeFragment();
             } else if (item.getItemId() == R.id.profile) {
-                replaceFragment(new ProfileFragment());
+                selectedFragment = new ProfileFragment();
             } else if (item.getItemId() == R.id.settings) {
-                replaceFragment(new SettingsFragment());
+                selectedFragment = new SettingsFragment();
+            }    else if (item.getItemId() == R.id.aichat) {
+                   selectedFragment = new ChatFragment();
+            }
+            if (selectedFragment != null) {
+                replaceFragment(selectedFragment);
             }
             return true;
         });
     }
+
 
     private void replaceFragment(Fragment fragment) {
 
@@ -37,4 +46,5 @@ public class MenuActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frameLayout, fragment);
         fragmentTransaction.commit();
     }
+
 }
