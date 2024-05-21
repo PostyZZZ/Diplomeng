@@ -8,6 +8,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="select_direction">Выберите направление перевода</string>
 
+
     <string-array name="directions">
         <item>С русского на английский</item>
         <item>С английского на русский</item>

@@ -1,6 +1,6 @@
 package com.example.diplomeng;
 
-import android.Manifest;  // Добавьте этот импорт
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +32,9 @@ public class ProfileFragment extends Fragment {
 
     private TextView usernameTextView, emailTextView;
     private ImageView avatarImageView;
-    private Button logoutButton, changeAvatarButton;
+    private ImageButton changeAvatarButton;  // Заменил Button на ImageButton
+    private Button logoutButton;
+
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int REQUEST_CODE_READ_EXTERNAL_STORAGE = 123; // Добавьте это объявление переменной

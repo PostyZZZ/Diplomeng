@@ -27,7 +27,7 @@
         android:id="@+id/textlogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:drawableLeft="@drawable/ic_person"
         android:drawablePadding="8dp"
         android:gravity="center_vertical"
@@ -37,7 +37,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.044"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textinfo" />
+        app:layout_constraintTop_toBottomOf="@+id/avatarImageView" />
 
     <TextView
         android:id="@+id/textemail"
@@ -67,27 +67,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/avatarImageView"
-        android:layout_width="174dp"
-        android:layout_height="218dp"
-        android:layout_marginTop="60dp"
+        android:layout_width="175dp"
+        android:layout_height="175dp"
+        android:layout_marginTop="44dp"
+        android:padding="5dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/ic_defavatar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textemail" />
+        app:layout_constraintTop_toBottomOf="@+id/textinfo"
+        app:shapeAppearanceOverlay="@style/circular"
+        app:strokeColor="#397BFF"
+        app:strokeWidth="5dp" />
 
-    <Button
+    <ImageButton
         android:id="@+id/changeAvatarButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:text="Изменить аватар"
-        app:layout_constraintEnd_toEndOf="@id/avatarImageView"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@id/avatarImageView"
-        app:layout_constraintTop_toBottomOf="@+id/avatarImageView" />
+        android:layout_width="56dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="104dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_edit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.062"
+        app:layout_constraintStart_toEndOf="@+id/avatarImageView"
+        app:layout_constraintTop_toBottomOf="@+id/textinfo" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
